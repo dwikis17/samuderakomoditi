@@ -5,28 +5,33 @@ import { useRef } from "react";
 
 export default function WhyUs() {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px", amount: 0.4 });
+    // Adjusted margin and amount for better mobile visibility
+    const isInView = useInView(ref, { once: true, margin: "0px", amount: 0.2 });
 
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.3
+                staggerChildren: 0.3,
+                // Added duration for container
+                duration: 0.5,
+                // Ensure container becomes visible first
+                when: "beforeChildren"
             }
         }
     };
 
     const itemVariants = {
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0, y: 20 }, // Reduced y offset for smoother mobile animation
         visible: {
             opacity: 1,
             y: 0,
             transition: {
                 type: "spring",
-                stiffness: 100,
-                damping: 12,
-                duration: 1
+                stiffness: 50, // Reduced stiffness for smoother animation
+                damping: 8,
+                duration: 0.8
             }
         }
     };
@@ -38,7 +43,9 @@ export default function WhyUs() {
                     className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[500px]"
                     variants={containerVariants}
                     initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
+                    // Changed to whileInView for better mobile support
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
                 >
                     <motion.div
                         variants={itemVariants}

@@ -1,18 +1,26 @@
 'use client'
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 export default function Ethical() {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px", amount: 0.4 });
+    const isInView = useInView(ref, { once: true, margin: "0px", amount: 0.4 });
+
+    // Add useEffect to debug visibility on mobile
+    useEffect(() => {
+        console.log("Is in view:", isInView);
+        console.log("Ref current:", ref.current);
+    }, [isInView]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.3
+                staggerChildren: 0.3,
+                // Add a delay to ensure parent animation starts
+                delayChildren: 0.2
             }
         }
     };
@@ -60,13 +68,15 @@ export default function Ethical() {
     };
 
     return (
-        <section className="bg-[#2d3250] py-20" ref={ref}>
+        <section className="bg-[#2d3250] py-20 min-h-screen" ref={ref}>
             <div className="container mx-auto px-4">
                 <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 gap-8 min-h-[500px]"
                     variants={containerVariants}
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
+                    // Add viewport options to ensure animation triggers correctly on mobile
+                    viewport={{ once: true, amount: 0.4 }}
                 >
                     <motion.div
                         variants={itemVariants}
